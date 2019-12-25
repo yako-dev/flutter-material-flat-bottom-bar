@@ -39,8 +39,13 @@ class _SkeletonScreenState extends State<SkeletonScreen> {
       tabBuilder: (BuildContext context, int index) {
         return CupertinoTabView(builder: (BuildContext context) => tabs[index]);
       },
-      tabBar: CupertinoColoredTabBar(
-        items: <MaterialFlatBottomBarItem>[
+      floatingActionButton: FloatingActionButton(
+        onPressed: () {},
+        backgroundColor: Theme.of(context).primaryColor,
+        child: Icon(Icons.add),
+      ),
+      tabBar: MaterialFlatBottomTabBar(
+        items: <MaterialFlatBottomTabBarItem>[
           buildItem(title: 'Home', iconData: Icons.home),
           buildItem(title: 'Friends', iconData: Icons.people),
           buildItem(title: 'Settings', iconData: Icons.settings),
@@ -50,18 +55,18 @@ class _SkeletonScreenState extends State<SkeletonScreen> {
     );
   }
 
-  MaterialFlatBottomBarItem buildItem({
+  MaterialFlatBottomTabBarItem buildItem({
     @required String title,
     @required IconData iconData,
   }) {
-    return MaterialFlatBottomBarItem(
+    return MaterialFlatBottomTabBarItem(
       titleBuilder: (bool current) {
         return Text(
           title,
           style: TextStyle(
             color: current ? Color.fromRGBO(91, 54, 183, 1) : Colors.black,
             fontWeight: current ? FontWeight.bold : FontWeight.w400,
-            fontSize: current ? 13 : 10,
+            fontSize: current ? 12 : 10,
           ),
         );
       },
@@ -69,6 +74,7 @@ class _SkeletonScreenState extends State<SkeletonScreen> {
         return Icon(
           iconData,
           color: current ? Color.fromRGBO(91, 54, 183, 1) : Colors.black,
+          size: 24,
         );
       },
       backgroundColor: (bool current) {

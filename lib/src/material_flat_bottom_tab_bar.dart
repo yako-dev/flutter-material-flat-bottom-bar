@@ -1,3 +1,4 @@
+import 'dart:io';
 import 'dart:ui' show ImageFilter;
 
 import 'package:flutter/cupertino.dart';
@@ -5,7 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:material_flat_bottom_bar/src/material_flat_bottom_bar_item.dart';
 
-const double _kTabBarHeight = kBottomNavigationBarHeight;
+double _kTabBarHeight = Platform.isIOS ? 50 : kBottomNavigationBarHeight;
 
 const Color _kDefaultTabBarBorderColor = CupertinoDynamicColor.withBrightness(
   color: Color(0x4C000000),
@@ -13,15 +14,16 @@ const Color _kDefaultTabBarBorderColor = CupertinoDynamicColor.withBrightness(
 );
 const Color _kDefaultTabBarInactiveColor = CupertinoColors.inactiveGray;
 
-class CupertinoColoredTabBar extends StatelessWidget
+class MaterialFlatBottomTabBar extends StatelessWidget
     implements PreferredSizeWidget {
-  const CupertinoColoredTabBar({
+  const MaterialFlatBottomTabBar({
     @required this.items,
     Key key,
     this.onTap,
     this.currentIndex = 0,
     this.backgroundColor,
     this.activeColor,
+    this.fabPosition,
     this.inactiveColor = _kDefaultTabBarInactiveColor,
     this.iconSize = 30.0,
     this.border = const Border(
@@ -31,19 +33,18 @@ class CupertinoColoredTabBar extends StatelessWidget
           style: BorderStyle.solid),
     ),
   })  : assert(items != null),
-        assert(
-          items.length >= 2,
-          "Tabs need at least 2 items to conform to Apple's HIG",
-        ),
+        assert(items.length >= 2,
+            "Tabs need at least 2 items to conform to Apple's HIG"),
         assert(currentIndex != null),
         assert(0 <= currentIndex && currentIndex < items.length),
         assert(iconSize != null),
         assert(inactiveColor != null),
         super(key: key);
 
-  final List<MaterialFlatBottomBarItem> items;
+  final List<MaterialFlatBottomTabBarItem> items;
   final ValueChanged<int> onTap;
   final int currentIndex;
+  final int fabPosition;
   final Color backgroundColor;
   final Color activeColor;
   final Color inactiveColor;
@@ -51,7 +52,7 @@ class CupertinoColoredTabBar extends StatelessWidget
   final Border border;
 
   @override
-  Size get preferredSize => const Size.fromHeight(_kTabBarHeight);
+  Size get preferredSize => Size.fromHeight(_kTabBarHeight);
 
   bool opaque(BuildContext context) {
     final Color backgroundColor =
@@ -65,7 +66,7 @@ class CupertinoColoredTabBar extends StatelessWidget
     final double bottomPadding = MediaQuery.of(context).padding.bottom;
 
     final Color backgroundColor = CupertinoDynamicColor.resolve(
-      this.backgroundColor ?? CupertinoTheme.of(context).barBackgroundColor,
+      this.backgroundColor ?? Colors.white,
       context,
     );
 
@@ -88,10 +89,7 @@ class CupertinoColoredTabBar extends StatelessWidget
     final Color inactive =
         CupertinoDynamicColor.resolve(inactiveColor, context);
     Widget result = DecoratedBox(
-      decoration: BoxDecoration(
-        border: resolvedBorder,
-        color: backgroundColor,
-      ),
+      decoration: BoxDecoration(border: resolvedBorder, color: backgroundColor),
       child: SizedBox(
         height: _kTabBarHeight + bottomPadding,
         child: IconTheme.merge(
@@ -137,8 +135,11 @@ class CupertinoColoredTabBar extends StatelessWidget
 
     for (int index = 0; index < items.length; index += 1) {
       final bool active = index == currentIndex;
-      final MaterialFlatBottomBarItem item = items[index];
+      final MaterialFlatBottomTabBarItem item = items[index];
       Color background = item.backgroundColor(active);
+      if (index == fabPosition) {
+        result.add(Container(width: 56));
+      }
       result.add(
         Expanded(
           child: Container(
@@ -167,7 +168,7 @@ class CupertinoColoredTabBar extends StatelessWidget
   }
 
   List<Widget> _buildSingleTabItem(
-      MaterialFlatBottomBarItem item, bool active) {
+      MaterialFlatBottomTabBarItem item, bool active) {
     List<Widget> widgets = <Widget>[
       Expanded(child: Center(child: item.iconBuilder(active))),
     ];
@@ -175,9 +176,10 @@ class CupertinoColoredTabBar extends StatelessWidget
     return widgets;
   }
 
-  CupertinoColoredTabBar copyWith({
+  MaterialFlatBottomTabBar copyWith({
     Key key,
-    List<MaterialFlatBottomBarItem> items,
+    List<MaterialFlatBottomTabBarItem> items,
+    int fabPosition,
     Color backgroundColor,
     Color activeColor,
     Color inactiveColor,
@@ -186,9 +188,10 @@ class CupertinoColoredTabBar extends StatelessWidget
     int currentIndex,
     ValueChanged<int> onTap,
   }) {
-    return CupertinoColoredTabBar(
+    return MaterialFlatBottomTabBar(
       key: key ?? this.key,
       items: items ?? this.items,
+      fabPosition: fabPosition ?? this.fabPosition,
       backgroundColor: backgroundColor ?? this.backgroundColor,
       activeColor: activeColor ?? this.activeColor,
       inactiveColor: inactiveColor ?? this.inactiveColor,

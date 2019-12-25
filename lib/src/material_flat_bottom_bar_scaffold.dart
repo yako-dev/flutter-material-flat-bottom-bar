@@ -1,5 +1,8 @@
+import 'dart:io';
+
 import 'package:flutter/cupertino.dart';
-import 'package:material_flat_bottom_bar/src/colored_tab_bar.dart';
+import 'package:flutter/material.dart';
+import 'package:material_flat_bottom_bar/src/material_flat_bottom_tab_bar.dart';
 
 class MaterialFlatBottomBarController extends ChangeNotifier {
   MaterialFlatBottomBarController({int initialIndex = 0})
@@ -32,14 +35,16 @@ class MaterialFlatBottomBarController extends ChangeNotifier {
 
 class MaterialFlatBottomBarScaffold extends StatefulWidget {
   final MaterialFlatBottomBarController controller;
+  final FloatingActionButton floatingActionButton;
   final IndexedWidgetBuilder tabBuilder;
   final bool resizeToAvoidBottomInset;
-  final CupertinoColoredTabBar tabBar;
+  final MaterialFlatBottomTabBar tabBar;
   final Color backgroundColor;
 
   MaterialFlatBottomBarScaffold({
     @required this.tabBar,
     @required this.tabBuilder,
+    this.floatingActionButton,
     Key key,
     this.controller,
     this.backgroundColor,
@@ -163,15 +168,27 @@ class _MaterialFlatBottomBarScaffoldState
             child: Align(
               alignment: Alignment.bottomCenter,
               child: widget.tabBar.copyWith(
+                fabPosition: widget.floatingActionButton == null
+                    ? -1
+                    : (widget.tabBar.items.length / 2).floor(),
                 currentIndex: _controller.index,
                 onTap: (int newIndex) {
                   _controller.index = newIndex;
-                  if (widget.tabBar.onTap != null)
+                  if (widget.tabBar.onTap != null) {
                     widget.tabBar.onTap(newIndex);
+                  }
                 },
               ),
             ),
           ),
+          widget.floatingActionButton == null
+              ? Container()
+              : Positioned(
+                  bottom: MediaQuery.of(context).padding.bottom +
+                      (Platform.isAndroid ? 28 : 22.5),
+                  left: MediaQuery.of(context).size.width / 2 - 28,
+                  child: widget.floatingActionButton,
+                ),
         ],
       ),
     );
