@@ -7,10 +7,10 @@ class GeneratedScreen extends StatelessWidget {
   final String inheritedScreenName;
 
   const GeneratedScreen({
-    Key key,
-    @required this.name,
-    @required this.icon,
-    @required this.inheritedScreenName,
+    Key? key,
+    required this.name,
+    required this.icon,
+    required this.inheritedScreenName,
   }) : super(key: key);
 
   @override

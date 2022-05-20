@@ -56,8 +56,8 @@ class _SkeletonScreenState extends State<SkeletonScreen> {
   }
 
   MaterialFlatBottomTabBarItem buildItem({
-    @required String title,
-    @required IconData iconData,
+    required String title,
+    required IconData iconData,
   }) {
     return MaterialFlatBottomTabBarItem(
       titleBuilder: (bool current) {

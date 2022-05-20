@@ -6,8 +6,8 @@ class MaterialFlatBottomTabBarItem {
   final Color Function(bool isActive) backgroundColor;
 
   const MaterialFlatBottomTabBarItem({
-    @required this.iconBuilder,
-    @required this.titleBuilder,
-    @required this.backgroundColor,
+    required this.iconBuilder,
+    required this.titleBuilder,
+    required this.backgroundColor,
   });
 }

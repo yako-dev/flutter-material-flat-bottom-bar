@@ -17,8 +17,8 @@ const Color _kDefaultTabBarInactiveColor = CupertinoColors.inactiveGray;
 class MaterialFlatBottomTabBar extends StatelessWidget
     implements PreferredSizeWidget {
   const MaterialFlatBottomTabBar({
-    @required this.items,
-    Key key,
+    required this.items,
+    Key? key,
     this.onTap,
     this.currentIndex = 0,
     this.backgroundColor,
@@ -42,11 +42,11 @@ class MaterialFlatBottomTabBar extends StatelessWidget
         super(key: key);
 
   final List<MaterialFlatBottomTabBarItem> items;
-  final ValueChanged<int> onTap;
+  final ValueChanged<int>? onTap;
   final int currentIndex;
-  final int fabPosition;
-  final Color backgroundColor;
-  final Color activeColor;
+  final int? fabPosition;
+  final Color? backgroundColor;
+  final Color? activeColor;
   final Color inactiveColor;
   final double iconSize;
   final Border border;
@@ -149,7 +149,7 @@ class MaterialFlatBottomTabBar extends StatelessWidget
               onTap: onTap == null
                   ? null
                   : () {
-                      onTap(index);
+                      onTap!(index);
                     },
               child: Padding(
                 padding: const EdgeInsets.symmetric(vertical: 6.0),
@@ -177,16 +177,16 @@ class MaterialFlatBottomTabBar extends StatelessWidget
   }
 
   MaterialFlatBottomTabBar copyWith({
-    Key key,
-    List<MaterialFlatBottomTabBarItem> items,
-    int fabPosition,
-    Color backgroundColor,
-    Color activeColor,
-    Color inactiveColor,
-    Size iconSize,
-    Border border,
-    int currentIndex,
-    ValueChanged<int> onTap,
+    Key? key,
+    List<MaterialFlatBottomTabBarItem>? items,
+    int? fabPosition,
+    Color? backgroundColor,
+    Color? activeColor,
+    Color? inactiveColor,
+    Size? iconSize,
+    Border? border,
+    int? currentIndex,
+    ValueChanged<int>? onTap,
   }) {
     return MaterialFlatBottomTabBar(
       key: key ?? this.key,
@@ -195,7 +195,7 @@ class MaterialFlatBottomTabBar extends StatelessWidget
       backgroundColor: backgroundColor ?? this.backgroundColor,
       activeColor: activeColor ?? this.activeColor,
       inactiveColor: inactiveColor ?? this.inactiveColor,
-      iconSize: iconSize ?? this.iconSize,
+      iconSize: iconSize as double? ?? this.iconSize,
       border: border ?? this.border,
       currentIndex: currentIndex ?? this.currentIndex,
       onTap: onTap ?? this.onTap,

@@ -34,18 +34,18 @@ class MaterialFlatBottomBarController extends ChangeNotifier {
 }
 
 class MaterialFlatBottomBarScaffold extends StatefulWidget {
-  final MaterialFlatBottomBarController controller;
-  final FloatingActionButton floatingActionButton;
+  final MaterialFlatBottomBarController? controller;
+  final FloatingActionButton? floatingActionButton;
   final IndexedWidgetBuilder tabBuilder;
   final bool resizeToAvoidBottomInset;
   final MaterialFlatBottomTabBar tabBar;
-  final Color backgroundColor;
+  final Color? backgroundColor;
 
   MaterialFlatBottomBarScaffold({
-    @required this.tabBar,
-    @required this.tabBuilder,
+    required this.tabBar,
+    required this.tabBuilder,
     this.floatingActionButton,
-    Key key,
+    Key? key,
     this.controller,
     this.backgroundColor,
     this.resizeToAvoidBottomInset = true,
@@ -64,7 +64,7 @@ class MaterialFlatBottomBarScaffold extends StatefulWidget {
 
 class _MaterialFlatBottomBarScaffoldState
     extends State<MaterialFlatBottomBarScaffold> {
-  MaterialFlatBottomBarController _controller;
+  MaterialFlatBottomBarController? _controller;
 
   @override
   void initState() {
@@ -84,7 +84,7 @@ class _MaterialFlatBottomBarScaffoldState
     if (shouldDisposeOldController) {
       _controller?.dispose();
     } else if (_controller?._isDisposed == false) {
-      _controller.removeListener(_onCurrentIndexChange);
+      _controller!.removeListener(_onCurrentIndexChange);
     }
 
     newController.addListener(_onCurrentIndexChange);
@@ -93,8 +93,9 @@ class _MaterialFlatBottomBarScaffoldState
 
   void _onCurrentIndexChange() {
     assert(
-      _controller.index >= 0 && _controller.index < widget.tabBar.items.length,
-      "The $runtimeType's current index ${_controller.index} is "
+      _controller!.index >= 0 &&
+          _controller!.index < widget.tabBar.items.length,
+      "The $runtimeType's current index ${_controller!.index} is "
       'out of bounds for the tab bar with ${widget.tabBar.items.length} tabs',
     );
 
@@ -107,8 +108,8 @@ class _MaterialFlatBottomBarScaffoldState
     if (widget.controller != oldWidget.controller) {
       _updateTabController(
           shouldDisposeOldController: oldWidget.controller == null);
-    } else if (_controller.index >= widget.tabBar.items.length) {
-      _controller.index = widget.tabBar.items.length - 1;
+    } else if (_controller!.index >= widget.tabBar.items.length) {
+      _controller!.index = widget.tabBar.items.length - 1;
     }
   }
 
@@ -118,7 +119,7 @@ class _MaterialFlatBottomBarScaffoldState
     MediaQueryData newMediaQuery = MediaQuery.of(context);
 
     Widget content = _TabSwitchingView(
-      currentTabIndex: _controller.index,
+      currentTabIndex: _controller!.index,
       tabCount: widget.tabBar.items.length,
       tabBuilder: widget.tabBuilder,
     );
@@ -157,8 +158,9 @@ class _MaterialFlatBottomBarScaffoldState
 
     return DecoratedBox(
       decoration: BoxDecoration(
-        color: CupertinoDynamicColor.resolve(widget.backgroundColor, context) ??
-            CupertinoTheme.of(context).scaffoldBackgroundColor,
+        color: widget.backgroundColor != null
+            ? CupertinoDynamicColor.resolve(widget.backgroundColor!, context)
+            : CupertinoTheme.of(context).scaffoldBackgroundColor,
       ),
       child: Stack(
         children: <Widget>[
@@ -171,11 +173,11 @@ class _MaterialFlatBottomBarScaffoldState
                 fabPosition: widget.floatingActionButton == null
                     ? -1
                     : (widget.tabBar.items.length / 2).floor(),
-                currentIndex: _controller.index,
+                currentIndex: _controller!.index,
                 onTap: (int newIndex) {
-                  _controller.index = newIndex;
+                  _controller!.index = newIndex;
                   if (widget.tabBar.onTap != null) {
-                    widget.tabBar.onTap(newIndex);
+                    widget.tabBar.onTap!(newIndex);
                   }
                 },
               ),
@@ -187,7 +189,7 @@ class _MaterialFlatBottomBarScaffoldState
                   bottom: MediaQuery.of(context).padding.bottom +
                       (Platform.isAndroid ? 28 : 22.5),
                   left: MediaQuery.of(context).size.width / 2 - 28,
-                  child: widget.floatingActionButton,
+                  child: widget.floatingActionButton!,
                 ),
         ],
       ),
@@ -199,7 +201,7 @@ class _MaterialFlatBottomBarScaffoldState
     if (widget.controller == null) {
       _controller?.dispose();
     } else if (_controller?._isDisposed == false) {
-      _controller.removeListener(_onCurrentIndexChange);
+      _controller!.removeListener(_onCurrentIndexChange);
     }
 
     super.dispose();
@@ -208,9 +210,9 @@ class _MaterialFlatBottomBarScaffoldState
 
 class _TabSwitchingView extends StatefulWidget {
   const _TabSwitchingView({
-    @required this.currentTabIndex,
-    @required this.tabCount,
-    @required this.tabBuilder,
+    required this.currentTabIndex,
+    required this.tabCount,
+    required this.tabBuilder,
   })  : assert(currentTabIndex != null),
         assert(tabCount != null && tabCount > 0),
         assert(tabBuilder != null);
