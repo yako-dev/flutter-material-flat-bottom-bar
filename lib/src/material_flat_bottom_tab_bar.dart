@@ -2,11 +2,13 @@ import 'dart:io';
 import 'dart:ui' show ImageFilter;
 
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/foundation.dart' show kIsWeb;
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:material_flat_bottom_bar/src/material_flat_bottom_bar_item.dart';
 
-double _kTabBarHeight = Platform.isIOS ? 50 : kBottomNavigationBarHeight;
+double _kTabBarHeight =
+    !kIsWeb && Platform.isIOS ? 50 : kBottomNavigationBarHeight;
 
 const Color _kDefaultTabBarBorderColor = CupertinoDynamicColor.withBrightness(
   color: Color(0x4C000000),

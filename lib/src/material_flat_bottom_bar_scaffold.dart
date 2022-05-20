@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/foundation.dart' show kIsWeb;
 import 'package:flutter/material.dart';
 import 'package:material_flat_bottom_bar/src/material_flat_bottom_tab_bar.dart';
 
@@ -187,7 +188,7 @@ class _MaterialFlatBottomBarScaffoldState
               ? Container()
               : Positioned(
                   bottom: MediaQuery.of(context).padding.bottom +
-                      (Platform.isAndroid ? 28 : 22.5),
+                      (!kIsWeb && Platform.isAndroid ? 28 : 22.5),
                   left: MediaQuery.of(context).size.width / 2 - 28,
                   child: widget.floatingActionButton!,
                 ),
